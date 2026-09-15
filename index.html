@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +36,7 @@
     <style>
         body { 
             background-color: #F1F5EB; 
+            -webkit-overflow-scrolling: touch;
         }
         /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
@@ -43,6 +44,9 @@
         ::-webkit-scrollbar-thumb { background: #133020; border-radius: 4px; }
         
         /* Drag properties for physics pills */
+        #physics-container {
+            touch-action: pan-y; /* Membantu scroll vertical tetap lancar di area ini */
+        }
         .physics-pill {
             cursor: grab;
             user-select: none;
@@ -89,11 +93,6 @@
             <p class="text-gray-600 text-sm md:text-[15px] max-w-lg mx-auto mb-10 leading-relaxed font-medium">
                 Semua yang kamu butuhkan untuk belajar remote work, dari WBook, rekaman webinar, sampai komunitas dan mentoring, dikumpulkan dalam satu akses.
             </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button class="w-full sm:w-auto border border-brand-dark px-8 py-3 rounded-full text-[14px] font-semibold hover:bg-brand-dark hover:text-white transition-all duration-300">
-                    Checkout!
-                </button>
-            </div>
         </div>
 
         <!-- Floating Stats (Desktop Only) -->
@@ -131,7 +130,7 @@
                 <p class="font-bold text-[#DCE5D1] text-[15px]">-Ajengwahys</p>
             </div>
 
-            <!-- PHYSICS PILLS (Controlled by JS below) -->
+            <!-- PHYSICS PILLS -->
             <div class="physics-pill absolute top-0 left-0 bg-white text-brand-dark text-[11px] font-bold px-4 py-2.5 rounded-full flex items-center gap-2 shadow-lg border border-gray-100 z-30">
                 <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                 ALWAYS UPDATED
@@ -218,8 +217,7 @@
             <div class="w-full md:w-1/2">
                 <span class="bg-brand-light text-brand-dark px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">Best Value</span>
                 <h2 class="text-3xl font-semibold tracking-tight text-brand-dark mb-4">Bukan Sekedar Wbook</h2>
-                <p class="text-gray-500 mb-6 font-medium leading-relaxed">**Mulai perjalanan remote work-mu dengan lebih lengkap. Materi, webinar, komunitas, dan berbagai support untuk membantumu terus belajar semuanya ada dalam satu akses.**
-</p>
+                <p class="text-gray-500 mb-6 font-medium leading-relaxed">**Mulai perjalanan remote work-mu dengan lebih lengkap. Materi, webinar, komunitas, dan berbagai support untuk membantumu terus belajar semuanya ada dalam satu akses.**</p>
                 
                 <ul class="space-y-4">
                     <li class="flex items-start gap-3">
@@ -341,113 +339,24 @@
     </section>
 
     <!-- NEW FEATURE: Sticky Checkout Bar (Always Visible) -->
-    <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] z-50 px-6 py-4 transition-transform duration-300 transform translate-y-0">
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] z-50 px-4 sm:px-6 py-3 sm:py-4 transition-transform duration-300 transform translate-y-0">
         <div class="max-w-6xl mx-auto flex justify-between items-center gap-4">
             <div class="hidden sm:block">
                 <p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-0.5">Penawaran Spesial</p>
                 <p class="text-[15px] font-semibold text-brand-dark">Ebook Remote Worker + Lifetime Community</p>
             </div>
             
-            <div class="flex items-center gap-4 sm:gap-8 w-full sm:w-auto justify-between sm:justify-end">
-                <div class="text-left sm:text-right">
-                    <p class="text-[10px] text-gray-400 line-through mb-0.5">Rp 499.000</p>
-                    <p class="text-xl sm:text-2xl font-bold text-brand-dark">Rp 199.000</p>
+            <div class="flex items-center gap-3 sm:gap-8 w-full sm:w-auto justify-between sm:justify-end">
+                <div class="text-left sm:text-right shrink-0">
+                    <p class="text-[10px] sm:text-[11px] text-gray-400 line-through mb-0.5">Rp 499.000</p>
+                    <p class="text-[17px] sm:text-2xl font-bold text-brand-dark leading-none whitespace-nowrap">Rp 199.000</p>
                 </div>
-                <button class="bg-brand-dark text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-opacity-90 shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto text-center">
+                <button class="bg-brand-dark text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-full font-bold text-[13px] sm:text-sm hover:bg-opacity-90 shadow-md hover:shadow-xl transition-all duration-300 shrink-0 whitespace-nowrap">
                     Beli Sekarang
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Script to Handle Matter.js Physics Engine -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const Engine = Matter.Engine,
-                  Runner = Matter.Runner,
-                  Bodies = Matter.Bodies,
-                  Composite = Matter.Composite,
-                  Mouse = Matter.Mouse,
-                  MouseConstraint = Matter.MouseConstraint;
-
-            // Setup Engine & World
-            const engine = Engine.create();
-            const container = document.getElementById('physics-container');
-            const pillsDOM = document.querySelectorAll('.physics-pill');
-            
-            let width = container.clientWidth;
-            let height = container.clientHeight;
-
-            // Define Walls (Invisible boundaries to keep pills inside)
-            const wallOptions = { isStatic: true, render: { visible: false } };
-            const ground = Bodies.rectangle(width / 2, height + 50, width, 100, wallOptions);
-            const ceiling = Bodies.rectangle(width / 2, -50, width, 100, wallOptions);
-            const leftWall = Bodies.rectangle(-50, height / 2, 100, height, wallOptions);
-            const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height, wallOptions);
-            
-            Composite.add(engine.world, [ground, ceiling, leftWall, rightWall]);
-
-            // Create Physics Bodies for Each Pill Shape
-            const pillBodies = [];
-            
-            pillsDOM.forEach((pill, index) => {
-                setTimeout(() => {
-                    const w = pill.offsetWidth;
-                    const h = pill.offsetHeight;
-                    
-                    const startX = (width - 150) + (Math.random() * 50 - 25);
-                    const startY = 10 + (index * 50);
-
-                    const body = Bodies.rectangle(startX, startY, w, h, {
-                        restitution: 0.7,
-                        friction: 0.1,
-                        frictionAir: 0.015,
-                        chamfer: { radius: h / 2 },
-                        angle: (Math.random() - 0.5) * 0.4 
-                    });
-
-                    pillBodies.push({ element: pill, body: body, w: w, h: h });
-                    Composite.add(engine.world, body);
-                }, 50); 
-            });
-
-            // Add Mouse Constraint for Drag and Drop
-            const mouse = Mouse.create(container);
-            const mouseConstraint = MouseConstraint.create(engine, {
-                mouse: mouse,
-                constraint: {
-                    stiffness: 0.2,
-                    render: { visible: false }
-                }
-            });
-            
-            mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
-            mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
-
-            Composite.add(engine.world, mouseConstraint);
-            Runner.run(Runner.create(), engine);
-
-            function syncDOM() {
-                pillBodies.forEach((p) => {
-                    p.element.style.transform = `translate(${p.body.position.x - p.w / 2}px, ${p.body.position.y - p.h / 2}px) rotate(${p.body.angle}rad)`;
-                });
-                requestAnimationFrame(syncDOM);
-            }
-            syncDOM();
-
-            window.addEventListener('resize', () => {
-                width = container.clientWidth;
-                height = container.clientHeight;
-                
-                Matter.Body.setPosition(ground, { x: width / 2, y: height + 50 });
-                Matter.Body.setPosition(rightWall, { x: width + 50, y: height / 2 });
-                Matter.Body.setPosition(leftWall, { x: -50, y: height / 2 });
-                Matter.Body.setPosition(ceiling, { x: width / 2, y: -50 });
-            });
-        });
-    </script>
-</body>
-</html>
 
     <!-- Script to Handle Matter.js Physics Engine -->
     <script>
@@ -516,6 +425,12 @@
             // Prevent normal mouse scrolling from breaking physics interaction
             mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
             mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
+            
+            // FIX SCROLL MOBILE (Macet-Macetan): Menghapus event touch Matter.js
+            // Hal ini membiarkan default mobile page scroll bekerja sempurna di HP
+            mouse.element.removeEventListener("touchstart", mouse.mousedown);
+            mouse.element.removeEventListener("touchmove", mouse.mousemove);
+            mouse.element.removeEventListener("touchend", mouse.mouseup);
 
             Composite.add(engine.world, mouseConstraint);
 
